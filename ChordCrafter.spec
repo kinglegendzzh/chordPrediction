@@ -75,5 +75,5 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name='VirtualKeyboard',
+    name='ChordCrafter',
 )
