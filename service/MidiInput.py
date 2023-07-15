@@ -17,7 +17,7 @@ class MidiInput(QObject):
         super().__init__()
         pygame.init()
         pygame.midi.init()
-
+        print("读取所有MIDI输入设备：")
         # 遍历所有MIDI设备并输出信息
         device_count = pygame.midi.get_count()
         for i in range(device_count):
@@ -33,7 +33,11 @@ class MidiInput(QObject):
                 break
 
         #手动指定设备id
-        input_device_id = 1
+        print(f"系统检测到相关MIDI设备，预选设备id:{input_device_id}")
+        choose = input("手动指定一个设备id（回车跳过）")
+
+        if choose is not None:
+            input_device_id = int(choose)
 
         if input_device_id is None:
             raise ValueError('Cannot find MIDI device {}'.format(device_name))
