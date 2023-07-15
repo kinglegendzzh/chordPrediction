@@ -1,18 +1,19 @@
 import os
 import sys
-import numpy as np
 
-from PyQt5 import QtGui
 from PyQt5.QtGui import QFont, QFontMetrics
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
-from musicpy.musicpy import N, get_chord
+from musicpy.musicpy import N
 
-from src.service.MidiInput import MidiInput
-from src.service.markov import ChordPredictor
-from src.utils import musicUtils, QueueUtil
+from service.MidiInput import MidiInput
+from service.markov import ChordPredictor
+from utils import QueueUtil
+from utils import musicUtils
 
-#TODO 对踏板的适配、预览和弦（全部播放、当前播放、预选风格和节拍）、播放时对当前序列的和弦的键位渲染、匹配度阈值、预测和弦的序列化展示、对预测和弦的键位渲染
+
+#TODO 对踏板的适配、预览和弦（全部播放、当前播放、预选音色和节拍）、播放时对当前序列的和弦的键位渲染、匹配度阈值、预测和弦的序列化展示、对预测和弦的键位渲染
+#TODO 和弦的情绪属性、暂停记录
 
 
 class VirtualKeyboard(QWidget):
@@ -542,6 +543,7 @@ class VirtualKeyboard(QWidget):
                             cline = line.split('||')
                             arr_str = cline[0].split(',,')
                             chord_sequences.append(arr_str)
+                            chord_sequences.append('#首尾分隔#')
                         lineNum += 1
         if len(chord_sequences) != 0:
             print(f"构建马尔科夫链{chord_sequences}")

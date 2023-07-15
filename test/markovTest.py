@@ -1,5 +1,5 @@
 # 创建预测器
-from src.service.markov import ChordPredictor
+from service.markov import ChordPredictor
 
 style = 'rock'
 chord_sequences = [['C', 'G', 'Am'], ['F', 'G', 'C']]
