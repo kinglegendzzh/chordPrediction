@@ -10,6 +10,7 @@ from service.MidiInput import MidiInput
 from service.markov import ChordPredictor
 from utils import QueueUtil
 from utils import musicUtils
+from utils.filePath import filePath
 
 
 #TODO 对踏板的适配、预览和弦（全部播放、当前播放、预选音色和节拍）、播放时对当前序列的和弦的键位渲染、匹配度阈值、预测和弦的序列化展示、对预测和弦的键位渲染
@@ -163,7 +164,7 @@ class VirtualKeyboard(QWidget):
         self.scroll_area.setWidget(self.scroll_content)
         labelhbox = QHBoxLayout()
         count = 0  # 记录已添加的多选框数量
-        for file_name in os.listdir('../labels/'):
+        for file_name in os.listdir(filePath('labels/')):
             name, extension = os.path.splitext(file_name)
             check_box = QCheckBox(name, self)
             check_box.setText(name)
@@ -228,9 +229,9 @@ class VirtualKeyboard(QWidget):
             stackedWidget.setObjectName("stackO")
             listWidget.setMaximumWidth(250)
             type = 1
-        directory_labels = "../labels/"
-        directory_records = "../records/"
-        for file_name in os.listdir(directory_labels):
+        directory_labels = "labels/"
+        directory_records = "records/"
+        for file_name in os.listdir(filePath(directory_labels)):
             item = '标注库- ' + str(file_name)
             listWidget.addItem(item)
             text = ""
@@ -239,7 +240,7 @@ class VirtualKeyboard(QWidget):
             # 设置文本域为只读
             text_edit.setReadOnly(True)
             cursor = text_edit.textCursor()
-            with open(directory_labels + str(file_name), 'r') as f:
+            with open(filePath(directory_labels) + str(file_name), 'r') as f:
                 lineNum = 1
                 for line in f:
                     if lineNum != 1:
@@ -249,7 +250,7 @@ class VirtualKeyboard(QWidget):
                     lineNum += 1
 
             stackedWidget.addWidget(text_edit)
-        for file_name in os.listdir(directory_records):
+        for file_name in os.listdir(filePath(directory_records)):
             item = '历史记录- ' + str(file_name)
             listWidget.addItem(item)
             text = ""
@@ -258,7 +259,7 @@ class VirtualKeyboard(QWidget):
             # 设置文本域为只读
             text_edit.setReadOnly(True)
             cursor = text_edit.textCursor()
-            with open(directory_records + str(file_name), 'r') as f:
+            with open(filePath(directory_records) + str(file_name), 'r') as f:
                 lineNum = 1
                 for line in f:
                     if lineNum != 1:
@@ -289,7 +290,7 @@ class VirtualKeyboard(QWidget):
         self.scroll_area.setWidget(self.scroll_content)
         labelhbox = QHBoxLayout()
         count = 0  # 记录已添加的多选框数量
-        for file_name in os.listdir('../labels/'):
+        for file_name in os.listdir(filePath('labels/')):
             name, extension = os.path.splitext(file_name)
             check_box = QCheckBox(name, self)
             check_box.setText(name)
@@ -312,7 +313,7 @@ class VirtualKeyboard(QWidget):
 
     def onRecord(self):
         if self.edit_1.text() != "":
-            directory = "../records/"
+            directory = filePath("records/")
             filename = self.edit_1.text()+".model"
             file_path = os.path.join(directory, filename)
             if os.path.exists(file_path):
@@ -334,7 +335,7 @@ class VirtualKeyboard(QWidget):
 
     def onLabel(self):
         if self.edit_2.text() != "":
-            directory = "../labels/"
+            directory = filePath("labels/")
             filenames = self.edit_2.text().split(',')
             for filename in filenames:
                 filename += ".model"
@@ -536,7 +537,7 @@ class VirtualKeyboard(QWidget):
         for cbox in self.findChildren(QCheckBox):
             if cbox.isChecked():
                 print(cbox)
-                with open('../labels/' + cbox.text() + '.model', 'r') as f:
+                with open(filePath('labels/') + cbox.text() + '.model', 'r') as f:
                     lineNum = 1
                     for line in f:
                         if lineNum != 1:
