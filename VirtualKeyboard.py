@@ -54,6 +54,9 @@ class VirtualKeyboard(QWidget):
     PRE_CHORD = None
     PRE_COUNT = 0
 
+    #预测终止标识符
+    ENDING = 'ENDING'
+
     def __init__(self):
         super().__init__()
         # 添加布局
@@ -544,7 +547,7 @@ class VirtualKeyboard(QWidget):
                             cline = line.split('||')
                             arr_str = cline[0].split(',,')
                             chord_sequences.append(arr_str)
-                            chord_sequences.append('#首尾分隔#')
+                            chord_sequences.append([self.ENDING])
                         lineNum += 1
         if len(chord_sequences) != 0:
             print(f"构建马尔科夫链{chord_sequences}")
@@ -589,7 +592,9 @@ class VirtualKeyboard(QWidget):
                 next_chord_prob = 0
             print('预测和弦:', next_chord)
             print('匹配度:', next_chord_prob)
-            if next_chord_prob != 0:
+            if next_chord in self.ENDING:
+                self.next.setText("可作为终止和弦, 匹配度："+ str(round(next_chord_prob, 4)*100) + "%")
+            elif next_chord_prob != 0:
                 self.next.setText("预测下一个和弦：" + next_chord + ", 匹配度："+ str(round(next_chord_prob, 4)*100) + "%")
             else:
                 self.next.setText("预测下一个和弦: ")
