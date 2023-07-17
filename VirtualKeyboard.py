@@ -15,6 +15,7 @@ from utils.filePath import filePath
 
 #TODO 对踏板的适配、预览和弦（全部播放、当前播放、预选音色和节拍）、播放时对当前序列的和弦的键位渲染、匹配度阈值、预测和弦的序列化展示、对预测和弦的键位渲染
 #TODO 和弦的情绪属性、暂停记录
+#TODO 支持多预测结果的输出
 
 
 class VirtualKeyboard(QWidget):
@@ -57,8 +58,12 @@ class VirtualKeyboard(QWidget):
     #预测终止标识符
     ENDING = 'ENDING'
 
-    def __init__(self):
+    #无设备标识
+    NoneMIDI = False
+
+    def __init__(self, NoneMIDI = False):
         super().__init__()
+        self.NoneMIDI = NoneMIDI
         # 添加布局
         self.vbox = QVBoxLayout()
         self.initUI()
@@ -83,9 +88,10 @@ class VirtualKeyboard(QWidget):
         # 设置窗口大小和标题
         self.setFixedSize(1200, 800)
         self.setWindowTitle('智能化音乐创作工具')
-
-        # 添加标题
-        title = QLabel('虚拟MIDI键盘')
+        if self.NoneMIDI:
+            title = QLabel("###您并没有接入MIDI设备###")
+        else:
+            title = QLabel('虚拟MIDI键盘')
         title.setAlignment(Qt.AlignCenter)
 
         grid = QGridLayout()
@@ -217,7 +223,8 @@ class VirtualKeyboard(QWidget):
         self.shaderLists(self.vbox)
 
         self.vbox.addWidget(title)
-        self.vbox.addLayout(grid)
+        if self.NoneMIDI is False:
+            self.vbox.addLayout(grid)
 
         self.setLayout(self.vbox)
 
@@ -225,7 +232,6 @@ class VirtualKeyboard(QWidget):
         type = 0
         # 读取模型
         if listWidget is None and stackedWidget is None:
-            print("初始化list")
             listWidget = QListWidget(self)
             stackedWidget = QStackedLayout()
             listWidget.setObjectName("listO")
@@ -272,8 +278,6 @@ class VirtualKeyboard(QWidget):
                     lineNum += 1
             stackedWidget.addWidget(text_edit)
         listWidget.currentRowChanged.connect(stackedWidget.setCurrentIndex)
-        print(f"list数量{listWidget.count()}")
-        print(f"stack数量{stackedWidget.count()}")
         if type == 1:
             hbox = QHBoxLayout()
             hbox.addWidget(listWidget)
@@ -397,18 +401,19 @@ class VirtualKeyboard(QWidget):
         # print(ch)
         # get_chord(ch.root, ch.chord_type)
         i = 0
-        for button in self.keys_button:
-            if self.key_pressed[i] == True:
-                if self.keys[i] == 'w':
-                    self.changeWhiteSheet(button, True)
+        if self.NoneMIDI is False:
+            for button in self.keys_button:
+                if self.key_pressed[i] == True:
+                    if self.keys[i] == 'w':
+                        self.changeWhiteSheet(button, True)
+                    else:
+                        self.changeBlackSheet(button, True)
                 else:
-                    self.changeBlackSheet(button, True)
-            else:
-                if self.keys[i] == 'w':
-                    self.changeWhiteSheet(button)
-                else:
-                    self.changeBlackSheet(button)
-            i += 1
+                    if self.keys[i] == 'w':
+                        self.changeWhiteSheet(button)
+                    else:
+                        self.changeBlackSheet(button)
+                i += 1
 
     @pyqtSlot()
     def updateMIDI(self):
@@ -635,6 +640,7 @@ if __name__ == '__main__':
             midi_input_thread.start()
     except ValueError:
         print("未找到任何midi设备")
+        virtual_keyboard  = VirtualKeyboard(True)
     virtual_keyboard.show()
 
     virtual_keyboard.start_timer()
