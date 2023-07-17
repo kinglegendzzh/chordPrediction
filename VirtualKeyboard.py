@@ -624,14 +624,17 @@ if __name__ == '__main__':
 
     # 创建虚拟钢琴键盘对象和MIDI输入对象，并将MIDI输入对象的虚拟键盘事件与虚拟钢琴键盘对象的虚拟键盘事件相连
     virtual_keyboard = VirtualKeyboard()
-    midi_input = MidiInput('your midi device name')
-    midi_input.v_key_pressed.connect(on_virtual_key_pressed)
-    midi_input.v_key_released.connect(on_virtual_key_released)
-    midi_input_thread = QThread()
-    midi_input.moveToThread(midi_input_thread)
-    midi_input_thread.started.connect(midi_input.run)
-    midi_input_thread.start()
-
+    try:
+        midi_input = MidiInput()
+        if midi_input.choosed:
+            midi_input.v_key_pressed.connect(on_virtual_key_pressed)
+            midi_input.v_key_released.connect(on_virtual_key_released)
+            midi_input_thread = QThread()
+            midi_input.moveToThread(midi_input_thread)
+            midi_input_thread.started.connect(midi_input.run)
+            midi_input_thread.start()
+    except ValueError:
+        print("未找到任何midi设备")
     virtual_keyboard.show()
 
     virtual_keyboard.start_timer()

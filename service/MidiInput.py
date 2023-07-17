@@ -9,10 +9,11 @@ class MidiInput(QObject):
     v_key_pressed = pyqtSignal(int)  # 虚拟钢琴键盘按下事件
     v_key_released = pyqtSignal(int)  # 虚拟钢琴键盘释放事件
 
-    def __init__(self, device_name):
+    choosed = True
+
+    def __init__(self):
         """
         初始化MIDI输入设备并启动监听循环。
-        :param device_name: 待监听的MIDI输入设备名称。
         """
         super().__init__()
         pygame.init()
@@ -26,21 +27,15 @@ class MidiInput(QObject):
 
         device_count = pygame.midi.get_count()
         input_device_id = None
-        for i in range(device_count):
-            device_info = pygame.midi.get_device_info(i)
-            if device_info[1].decode() == device_name:
-                input_device_id = i
-                break
-
-        #手动指定设备id
-        print(f"系统检测到相关MIDI设备，预选设备id:{input_device_id}")
-        choose = input("手动指定一个设备id（回车跳过）")
-
-        if choose is not None:
+        if device_count == 0:
+            self.choosed = False
+        else:
+            #手动指定设备id
+            choose = input("手动指定一个设备id（回车跳过）")
             input_device_id = int(choose)
 
         if input_device_id is None:
-            raise ValueError('Cannot find MIDI device {}'.format(device_name))
+            raise ValueError('Cannot find MIDI device')
 
         self.midi_input = pygame.midi.Input(input_device_id)
         self.running = True
