@@ -26,7 +26,7 @@ a = Analysis(
     ('/Users/apple/Desktop/pythonProject/chordPrediction/labels/常用终止式.model','labels'),
     ('/Users/apple/Desktop/pythonProject/chordPrediction/labels/忧郁.model','labels'),
     ('/Users/apple/Desktop/pythonProject/chordPrediction/labels/恢弘.model','labels'),
-    ('/Users/apple/Desktop/pythonProject/chordPrediction/labels/我的自制训练集.model','labels'),
+    ('/Users/apple/Desktop/pythonProject/chordPrediction/labels/我的自制数据集.model','labels'),
     ('/Users/apple/Desktop/pythonProject/chordPrediction/records/多利亚宇.model','records'),
     ('/Users/apple/Desktop/pythonProject/chordPrediction/records/悲伤爵士.model','records'),
     ('/Users/apple/Desktop/pythonProject/chordPrediction/records/我的自制和弦.model','records'),

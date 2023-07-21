@@ -3,7 +3,7 @@ import random
 
 class ChordPredictor:
 
-    # 初始化函数，用于加载训练数据并构建马尔科夫链
+    # 初始化函数，用于加载模型数据并构建马尔科夫链
     def __init__(self, style, chord_sequences, order=2):
         self.chord_progression = []  # 所有和弦的列表
         self.markov_chain = {}  # 马尔科夫链
