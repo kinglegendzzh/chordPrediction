@@ -16,7 +16,8 @@ from utils.filePath import filePath
 #TODO 对踏板的适配、预览和弦（全部播放、当前播放、预选音色和节拍）、播放时对当前序列的和弦的键位渲染、匹配度阈值、预测和弦的序列化展示、对预测和弦的键位渲染
 #TODO 和弦的情绪属性、暂停记录
 #TODO 支持多预测结果的输出
-
+#TODO 和弦预测的初始化函数执行动作不再每秒刷新一次了，现在改成只会在标签改变事件发生时才会触发，极大地提升了系统性能
+#TODO getChordAttr和弦输出测试
 
 class VirtualKeyboard(QWidget):
     """
