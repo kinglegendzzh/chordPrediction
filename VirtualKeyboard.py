@@ -13,11 +13,14 @@ from utils import musicUtils
 from utils.filePath import filePath
 
 
-#TODO 对踏板的适配、预览和弦（全部播放、当前播放、预选音色和节拍）、播放时对当前序列的和弦的键位渲染、匹配度阈值、预测和弦的序列化展示、对预测和弦的键位渲染
+#TODO 对踏板的适配、预览和弦（全部播放、当前播放、预选音色和节拍）、播放时对当前序列的和弦的键位渲染、匹配比例阈值、预测和弦的序列化展示、对预测和弦的键位渲染
 #TODO 和弦的情绪属性、暂停记录
 #TODO 支持多预测结果的输出
 #TODO 和弦预测的初始化函数执行动作不再每秒刷新一次了，现在改成只会在标签改变事件发生时才会触发，极大地提升了系统性能
 #TODO getChordAttr和弦输出测试
+#TODO 预测来源
+#TODO 更详细的分类
+#TODO 日志系统
 
 class VirtualKeyboard(QWidget):
     """
@@ -597,11 +600,11 @@ class VirtualKeyboard(QWidget):
                 print("准确率不通过")
                 next_chord_prob = 0
             print('预测和弦:', next_chord)
-            print('匹配度:', next_chord_prob)
+            print('匹配比例:', next_chord_prob)
             if next_chord in self.ENDING:
-                self.next.setText("可作为终止和弦, 匹配度："+ str(round(next_chord_prob, 4)*100) + "%")
+                self.next.setText("可作为终止和弦, 匹配比例："+ str(round(next_chord_prob, 4)*100) + "%")
             elif next_chord_prob != 0:
-                self.next.setText("预测下一个和弦：" + next_chord + ", 匹配度："+ str(round(next_chord_prob, 4)*100) + "%")
+                self.next.setText("预测下一个和弦：" + next_chord + ", 匹配比例："+ str(round(next_chord_prob, 4)*100) + "%")
             else:
                 self.next.setText("预测下一个和弦: ")
         else:

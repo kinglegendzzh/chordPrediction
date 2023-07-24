@@ -8,7 +8,7 @@ a = Analysis(
     ['VirtualKeyboard.py',
     'service/markov.py',
     'service/MidiInput.py',
-    'utils/markovUtils.py',
+    'utils/filePath.py',
     'utils/musicUtils.py',
     'utils/QueueUtil.py',
     'utils/StringUtils.py'

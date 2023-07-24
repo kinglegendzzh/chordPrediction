@@ -26,6 +26,7 @@ class ChordPredictor:
         # 记住最后一组状态和对应的下一个状态
         self.last_state = tuple(self.chord_progression[-order:])
         self.next_choice = self.markov_chain[self.last_state]
+        print(f"马尔可夫链初始化完成{self.markov_chain}")
 
     # 预测函数，用于根据当前状态生成下一个和弦并评估其听感匹配度
     def predict_chord(self, current_chords):
