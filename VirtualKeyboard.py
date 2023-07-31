@@ -20,7 +20,8 @@ from utils.filePath import filePath
 #TODO getChordAttr和弦输出测试
 #TODO 预测来源
 #TODO 更详细的分类
-#TODO 日志系统
+#TODO 日志系统/和弦翻译系统
+#TODO 基于转移概率矩阵的优化算法
 
 class VirtualKeyboard(QWidget):
     """
@@ -613,7 +614,7 @@ class VirtualKeyboard(QWidget):
 
     def start_timer(self):
         self.timer.start(1000)
-        self.updateTimer.start(200)
+        self.updateTimer.start(120)
 
     def stop_timer(self):
         self.timer.stop()
