@@ -90,7 +90,7 @@
 
 <h3>六、如何使用</h3>
 
-<p>go check the wiki page.(wiki is updating now)</p>
+<p>**待更新...**</p>
 
 <h3>七、未来更新清单</h3>
 
