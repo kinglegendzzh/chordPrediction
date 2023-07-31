@@ -11,7 +11,7 @@
 
 <img width="726" alt="DraggedImage" src="https://github.com/kinglegendzzh/chordPrediction/assets/33552269/9f731d4e-9f4b-4282-ae57-2c272437475f">
 
-<p>界面元素：</p>
+<p><strong>界面元素：</strong></p>
 
 <ol>
 	<li>当前和弦</li>
@@ -26,7 +26,7 @@
 	<li>实时监听的虚拟映射MIDI键盘</li>
 </ol>
 
-<p>目前适配的MIDI设备：</p>
+<p><strong>目前适配的MIDI设备：</strong></p>
 
 <ul>
 	<li>MIDI专业键盘49键及以上（最佳适配品牌：艾肯ICON iKeyBoard5 49键）</li>
@@ -61,8 +61,6 @@
 
 <p>而使用本系统，可以快速、自动地根据已有的和弦进行自动生成新的和弦组合，缩短创作时间，提高音乐的创作效率和质量，给音乐人带来更多的灵感和创作灵感，使音乐作品更加丰满、多样化和创新。</p>
 
-<p>在生成多样化和弦进行和和声的方面，由于系统采用的是n阶马尔科夫链算法，能够结合当前和弦进行的上下文信息，生成新的和弦组合，因此生成的和弦质量会更加优秀，更有创造性，音乐人可以根据自己的需要选择最佳的和弦进行组合，以达到自己对音乐作品的要求。</p>
-
 <p>总之，与不使用本系统相比，本系统能够自动快速的生成更具多样性和创新性的和弦组合，提高音乐作品的创新性，节省音乐人的时间，使音乐作品更富有质量和品质。</p>
 
 <h3>四、本系统使用的相关库</h3>
@@ -92,11 +90,11 @@
 <pre><code class="code-highlighted code-bash">pyinstaller ChordCrafter.spec</code></pre></li>
 </ul>
 
-<h4>方式二（<strong>直接在Releases下载可执行文件</strong>）</h4>
+<h4>方式二（<strong>直接在<a href="https://github.com/kinglegendzzh/chordPrediction/releases/">Releases</a>下载可执行文件</strong>）</h4>
 
 <h3>六、如何使用</h3>
 
-<p>go check the wiki page.</p>
+<p>go check the wiki page.(wiki is updating now)</p>
 
 <h3>七、未来更新清单</h3>
 
