@@ -22,6 +22,8 @@ from utils.filePath import filePath
 #TODO 更详细的分类
 #TODO 日志系统/和弦翻译系统
 #TODO 基于转移概率矩阵的优化算法
+#TODO 无设备也能操作和弦（和弦网格）
+#TODO 基于numpy的转移概率矩阵算法，新增预测精度控制器
 
 class VirtualKeyboard(QWidget):
     """
