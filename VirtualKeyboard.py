@@ -68,6 +68,9 @@ class VirtualKeyboard(QWidget):
     #无设备标识
     NoneMIDI = False
 
+    preStr = set()
+    preMapping = {}
+
     def __init__(self, NoneMIDI = False):
         super().__init__()
         self.NoneMIDI = NoneMIDI
@@ -344,6 +347,8 @@ class VirtualKeyboard(QWidget):
 
             #刷新list
             self.reShaderLists()
+            self.preStr.clear()
+            self.preMapping.clear()
         else:
             print("填写为空")
 
@@ -372,6 +377,8 @@ class VirtualKeyboard(QWidget):
             self.reShaderLists()
             #刷新label
             self.reShaderLabels()
+            self.preStr.clear()
+            self.preMapping.clear()
         else:
             print("填写为空")
 
@@ -379,6 +386,8 @@ class VirtualKeyboard(QWidget):
         self.QUEUE.clear()
         for i in range(0, self.MAX_QUEUE):
             self.findChild(QPushButton, "ch" + str(i)).setText("")
+        self.preStr.clear()
+        self.preMapping.clear()
 
     def onPressed(self, i):
         print('Key ' + str(i) + ' was pressed.')
@@ -475,6 +484,8 @@ class VirtualKeyboard(QWidget):
                         print("pop")
                         self.QUEUE.pop()
                         self.QUEUE.push(self.PRE_CHORD)
+                    self.preStr.clear()
+                    self.preMapping.clear()
                 else:
                     print(f"重复和弦{self.QUEUE.last()}")
         self.PRE_COUNT = len(pressing)
@@ -574,6 +585,7 @@ class VirtualKeyboard(QWidget):
 
         if self.QUEUE.length()>=order and len(chord_sequences)>0:
             print("阶数:", order)
+            #TODO 所有勾选事件时清除
             predictor = ChordPredictor("base", chord_sequences, order)
             if order == 3:
                 current_chords = [self.QUEUE.index(self.QUEUE.length() - 3), self.QUEUE.index(self.QUEUE.length() - 2), self.QUEUE.index(self.QUEUE.length() - 1)]
@@ -605,9 +617,14 @@ class VirtualKeyboard(QWidget):
             print('预测和弦:', next_chord)
             print('匹配比例:', next_chord_prob)
             if next_chord in self.ENDING:
-                self.next.setText("可作为终止和弦, 匹配比例："+ str(round(next_chord_prob, 4)*100) + "%")
+                self.preStr.add("[作为终止和弦("+str(round(next_chord_prob, 4)*100)+"%)]")
+                self.preMapping["作为终止和弦"] = str(round(next_chord_prob, 4)*100)
             elif next_chord_prob != 0:
-                self.next.setText("预测下一个和弦：" + next_chord + ", 匹配比例："+ str(round(next_chord_prob, 4)*100) + "%")
+                self.preStr.add("["+next_chord+"("+str(round(next_chord_prob, 4)*100)+"%)]")
+                self.preMapping[next_chord] = str(round(next_chord_prob, 4)*100)
+            if len(self.preStr) is not 0:
+                result_string = ', '.join(sorted(self.preStr))
+                self.next.setText("预测下一个和弦及匹配率: " + result_string)
             else:
                 self.next.setText("预测下一个和弦: ")
         else:
