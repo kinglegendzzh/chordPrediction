@@ -1,4 +1,13 @@
 <h2>ChordPrediction</h2>
+<h5><a herf='https://github.com/kinglegendzzh/chordPrediction/blob/master/README_EN.md'>English</a> <a herf='https://github.com/kinglegendzzh/chordPrediction/blob/master/README.md'>中文</a></h5>
+<blockquote>
+
+<p>Intelligent Music Composition Tool (Based on Markov Chain Chord Prediction Algorithm)</p>
+
+<p>Chord prediction is one of the significant applications in the music generation field. This system proposes a chord prediction algorithm based on n-th order Markov chains, applied to real-time chord prediction. The algorithm first constructs a Markov chain based on historical chord sequences, then generates the next chord based on the current state of the chord sequence. When trained with multiple chord sequences, this algorithm can better handle transitions between different musical styles, thereby enhancing the diversity of the generated results.</p>
+
+<p>The system also offers an interactive interface for applying this algorithm. Users can generate the chords they need through simple playing, as well as annotate, save, and preview chords, and independently train the model's accuracy. After performance evaluation, the algorithm, based on model data, can predict high-quality chords while ensuring prediction speed and stability.</p>
+</blockquote>
 
 ChordPrediction is an advanced tool designed for the purpose of intelligent music composition, leveraging a chord prediction algorithm based on Markov chains. This innovative system introduces a method for real-time chord prediction, which constructs a Markov chain from historical chord sequences and uses the current chord sequence state to generate the next chord. The algorithm is trained on multiple chord sequences to better handle transitions between different musical styles, thereby enhancing the diversity of the generated results.
 
