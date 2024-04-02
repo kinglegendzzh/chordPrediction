@@ -1,5 +1,5 @@
 <h2>ChordPrediction</h2>
-<h5><a herf='https://github.com/kinglegendzzh/chordPrediction/blob/master/README_EN.md'>English</a> <a herf='https://github.com/kinglegendzzh/chordPrediction/blob/master/README.md'>中文</a></h5>
+<a href='https://github.com/kinglegendzzh/chordPrediction/blob/master/README_EN.md'>English</a> <a href='https://github.com/kinglegendzzh/chordPrediction/blob/master/README.md'>中文</a>
 <blockquote>
 <p>智能化音乐创作工具(基于马尔科夫链的和弦预测算法)</p>
 
