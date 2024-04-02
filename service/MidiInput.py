@@ -2,6 +2,7 @@ import pygame
 import pygame.midi
 from PyQt5.QtCore import *
 
+
 class MidiInput(QObject):
     """
     MIDI输入类，负责监听并处理MIDI键盘事件，并将其转换为自定义虚拟键盘事件并发送出去。
@@ -30,7 +31,7 @@ class MidiInput(QObject):
         if device_count == 0:
             self.choosed = False
         else:
-            #手动指定设备id
+            # 手动指定设备id
             choose = input("手动指定一个设备id（回车跳过）")
             input_device_id = int(choose)
 
@@ -59,12 +60,12 @@ class MidiInput(QObject):
                         virtual_key = note - 36  # 将Note Number转换为虚拟钢琴键盘键号
                         # print(self.virtual_key_pressed.signatures)
                         self.v_key_pressed.emit(virtual_key)
-                        print("MIDI按键按下事件"+str(virtual_key))
+                        print("MIDI按键按下事件" + str(virtual_key))
                     elif status == 144 and velocity == 0:
                         # MIDI按键释放事件
                         virtual_key = note - 36  # 将Note Number转换为虚拟钢琴键盘键号
                         self.v_key_released.emit(virtual_key)
-                        print("MIDI按键释放事件"+str(virtual_key))
+                        print("MIDI按键释放事件" + str(virtual_key))
 
     def stop(self):
         """
