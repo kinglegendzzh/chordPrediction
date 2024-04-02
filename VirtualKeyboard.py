@@ -13,17 +13,15 @@ from utils import musicUtils
 from utils.filePath import filePath
 
 
-#TODO 对踏板的适配、预览和弦（全部播放、当前播放、预选音色和节拍）、播放时对当前序列的和弦的键位渲染、匹配比例阈值、预测和弦的序列化展示、对预测和弦的键位渲染
-#TODO 和弦的情绪属性、暂停记录
-#TODO 支持多预测结果的输出
-#TODO 和弦预测的初始化函数执行动作不再每秒刷新一次了，现在改成只会在标签改变事件发生时才会触发，极大地提升了系统性能
-#TODO getChordAttr和弦输出测试
-#TODO 预测来源
-#TODO 更详细的分类
-#TODO 日志系统/和弦翻译系统
-#TODO 基于转移概率矩阵的优化算法
-#TODO 无设备也能操作和弦（和弦网格）
-#TODO 基于numpy的转移概率矩阵算法，新增预测精度控制器
+# TODO 对踏板的适配、预览和弦（全部播放、当前播放、预选音色和节拍）、播放时对当前序列的和弦的键位渲染、匹配比例阈值、预测和弦的序列化展示、对预测和弦的键位渲染
+# TODO 和弦的情绪属性、暂停记录
+# TODO 支持多预测结果的输出
+# TODO 和弦预测的初始化函数执行动作不再每秒刷新一次了，现在改成只会在标签改变事件发生时才会触发，极大地提升了系统性能
+# TODO getChordAttr和弦输出测试
+# TODO 预测来源
+# TODO 更详细的分类
+# TODO 日志系统/和弦翻译系统
+# TODO 无设备也能操作和弦（和弦网格）
 
 class VirtualKeyboard(QWidget):
     """
@@ -58,17 +56,17 @@ class VirtualKeyboard(QWidget):
     # QUEUE = QueueUtil.Queue(["", "", "", "", "", "", "", "", "", ""])
     QUEUE = QueueUtil.Queue([])
 
-    #预缓存和弦
+    # 预缓存和弦
     PRE_CHORD = None
     PRE_COUNT = 0
 
-    #预测终止标识符
+    # 预测终止标识符
     ENDING = 'ENDING'
 
-    #无设备标识
+    # 无设备标识
     NoneMIDI = False
 
-    def __init__(self, NoneMIDI = False):
+    def __init__(self, NoneMIDI=False):
         super().__init__()
         self.NoneMIDI = NoneMIDI
         # 添加布局
@@ -89,7 +87,6 @@ class VirtualKeyboard(QWidget):
         self.updateTimer = QTimer(self)
         self.updateTimer.timeout.connect(self.updateButtonColor)
         self.updateTimer.timeout.connect(self.updateMIDI)
-
 
     def initUI(self):
         # 设置窗口大小和标题
@@ -131,7 +128,7 @@ class VirtualKeyboard(QWidget):
         ch.setObjectName("next")
         self.vbox.addWidget(ch)
 
-        #初始化和弦序列
+        # 初始化和弦序列
         chTitle = QLabel("实时记录最新十条和弦(松开琴键以写入,点击和弦以移出序列)：")
         chTitle.setObjectName("chordsQueueTitle")
         self.vbox.addWidget(chTitle)
@@ -149,7 +146,6 @@ class VirtualKeyboard(QWidget):
             self.chordsQueue.addWidget(ql)
         self.vbox.addLayout(self.chordsQueue)
 
-
         # 创建3个单选按钮
         self.radio_btn1 = QRadioButton('一阶')
         self.radio_btn2 = QRadioButton('二阶')
@@ -163,7 +159,6 @@ class VirtualKeyboard(QWidget):
         self.hbox_radio.addWidget(self.radio_btn2)
         self.hbox_radio.addWidget(self.radio_btn3)
         self.vbox.addLayout(self.hbox_radio)
-
 
         ch = QLabel('预选音乐风格/标签（上下滑动选择更多）: ')
         ch.setAlignment(Qt.AlignCenter)
@@ -328,21 +323,21 @@ class VirtualKeyboard(QWidget):
     def onRecord(self):
         if self.edit_1.text() != "":
             directory = filePath("records/")
-            filename = self.edit_1.text()+".model"
+            filename = self.edit_1.text() + ".model"
             file_path = os.path.join(directory, filename)
             if os.path.exists(file_path):
                 with open(os.path.join(directory, filename), 'a') as f:
                     f.write("\n")
                     csv_str = ',,'.join(self.QUEUE.array)
-                    f.write(csv_str+"||"+self.edit_3.text())
+                    f.write(csv_str + "||" + self.edit_3.text())
             else:
                 with open(os.path.join(directory, filename), 'w') as f:
                     f.write(self.edit_2.text())
                     f.write("\n")
                     csv_str = ',,'.join(self.QUEUE.array)
-                    f.write(csv_str+"||"+self.edit_3.text())
+                    f.write(csv_str + "||" + self.edit_3.text())
 
-            #刷新list
+            # 刷新list
             self.reShaderLists()
         else:
             print("填写为空")
@@ -360,17 +355,17 @@ class VirtualKeyboard(QWidget):
                         with open(os.path.join(directory, filename), 'a') as f:
                             f.write("\n")
                             csv_str = ',,'.join(self.QUEUE.array)
-                            f.write(csv_str+"||"+self.edit_3.text())
+                            f.write(csv_str + "||" + self.edit_3.text())
 
                     else:
                         with open(os.path.join(directory, filename), 'w') as f:
                             f.write(self.edit_2.text())
                             f.write("\n")
                             csv_str = ',,'.join(self.QUEUE.array)
-                            f.write(csv_str+"||"+self.edit_3.text())
+                            f.write(csv_str + "||" + self.edit_3.text())
             # 刷新list
             self.reShaderLists()
-            #刷新label
+            # 刷新label
             self.reShaderLabels()
         else:
             print("填写为空")
@@ -382,7 +377,7 @@ class VirtualKeyboard(QWidget):
 
     def onPressed(self, i):
         print('Key ' + str(i) + ' was pressed.')
-        if self.QUEUE.length()>i:
+        if self.QUEUE.length() > i:
             self.QUEUE.remove(i)
 
     # def paintEvent(self, event: QtGui.QPaintEvent):
@@ -479,7 +474,6 @@ class VirtualKeyboard(QWidget):
                     print(f"重复和弦{self.QUEUE.last()}")
         self.PRE_COUNT = len(pressing)
 
-
     def changeWhiteSheet(self, button, isGray=False):
         if isGray:
             button.setStyleSheet('border: 1px solid gray; border-radius: 3px;' + "background-color: #878787;")
@@ -572,11 +566,12 @@ class VirtualKeyboard(QWidget):
         elif self.radio_btn3.isChecked():
             order = 3
 
-        if self.QUEUE.length()>=order and len(chord_sequences)>0:
+        if self.QUEUE.length() >= order and len(chord_sequences) > 0:
             print("阶数:", order)
             predictor = ChordPredictor("base", chord_sequences, order)
             if order == 3:
-                current_chords = [self.QUEUE.index(self.QUEUE.length() - 3), self.QUEUE.index(self.QUEUE.length() - 2), self.QUEUE.index(self.QUEUE.length() - 1)]
+                current_chords = [self.QUEUE.index(self.QUEUE.length() - 3), self.QUEUE.index(self.QUEUE.length() - 2),
+                                  self.QUEUE.index(self.QUEUE.length() - 1)]
             else:
                 current_chords = [self.QUEUE.index(self.QUEUE.length() - 2), self.QUEUE.index(self.QUEUE.length() - 1)]
             next_chord, next_chord_prob = predictor.predict_chord(current_chords)
@@ -584,19 +579,22 @@ class VirtualKeyboard(QWidget):
             check_sequence = []
             for sequence in chord_sequences:
                 check_sequence += sequence
-            #准确率检查
+            # 准确率检查
             con = False
             if order == 1:
                 if self.QUEUE.index(self.QUEUE.length() - 1) in check_sequence:
                     con = True
             elif order == 2:
                 for i in range(len(check_sequence) - 1):
-                    if check_sequence[i] == self.QUEUE.index(self.QUEUE.length() - 2) and check_sequence[i + 1] == self.QUEUE.index(self.QUEUE.length() - 1):
+                    if check_sequence[i] == self.QUEUE.index(self.QUEUE.length() - 2) and check_sequence[
+                        i + 1] == self.QUEUE.index(self.QUEUE.length() - 1):
                         con = True
                         break
             elif order == 3:
                 for i in range(len(check_sequence) - 1):
-                    if check_sequence[i] == self.QUEUE.index(self.QUEUE.length() - 3) and check_sequence[i + 1] == self.QUEUE.index(self.QUEUE.length() - 2) and check_sequence[i + 2] == self.QUEUE.index(self.QUEUE.length() - 1):
+                    if check_sequence[i] == self.QUEUE.index(self.QUEUE.length() - 3) and check_sequence[
+                        i + 1] == self.QUEUE.index(self.QUEUE.length() - 2) and check_sequence[
+                        i + 2] == self.QUEUE.index(self.QUEUE.length() - 1):
                         con = True
                         break
             if con is False:
@@ -605,14 +603,14 @@ class VirtualKeyboard(QWidget):
             print('预测和弦:', next_chord)
             print('匹配比例:', next_chord_prob)
             if next_chord in self.ENDING:
-                self.next.setText("可作为终止和弦, 匹配比例："+ str(round(next_chord_prob, 4)*100) + "%")
+                self.next.setText("可作为终止和弦, 匹配比例：" + str(round(next_chord_prob, 4) * 100) + "%")
             elif next_chord_prob != 0:
-                self.next.setText("预测下一个和弦：" + next_chord + ", 匹配比例："+ str(round(next_chord_prob, 4)*100) + "%")
+                self.next.setText(
+                    "预测下一个和弦：" + next_chord + ", 匹配比例：" + str(round(next_chord_prob, 4) * 100) + "%")
             else:
                 self.next.setText("预测下一个和弦: ")
         else:
             self.next.setText("预测下一个和弦: ")
-
 
     def start_timer(self):
         self.timer.start(1000)
@@ -647,7 +645,7 @@ if __name__ == '__main__':
             midi_input_thread.start()
     except ValueError:
         print("未找到任何midi设备")
-        virtual_keyboard  = VirtualKeyboard(True)
+        virtual_keyboard = VirtualKeyboard(True)
     virtual_keyboard.show()
 
     virtual_keyboard.start_timer()

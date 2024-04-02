@@ -48,7 +48,7 @@ class ChordPredictor:
 
         # 更新最后一组状态和对应的下一个状态
         self.last_state = current_state + (next_chord,) if len(current_chords) >= len(self.last_state) else (
-        next_chord,)
+            next_chord,)
         self.next_choice = self.markov_chain.get(self.last_state, [])
 
         return next_chord, next_chord_prob
