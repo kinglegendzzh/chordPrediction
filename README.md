@@ -84,14 +84,19 @@
 	<li>在终端进入项目路径，输入下列命令即可生成可执行文件；
  
 
-<pre><code class="code-highlighted code-bash">pyinstaller ChordCrafter.spec</code></pre></li>
+<pre>
+<code class="code-highlighted code-bash">pyinstaller ChordCrafter.spec #适用于MacOS/Linux打包</code>
+<code class="code-highlighted code-bash">pyinstaller ChordCrafter_win64.spec #适用于Windows打包</code>
+</pre></li>
 </ul>
 
-<h4>方式二（<strong>直接在<a href="https://github.com/kinglegendzzh/chordPrediction/releases/">Releases</a>下载可执行文件</strong>）</h4>
+<h4>方式二（<strong>直接在<a href="https://github.com/kinglegendzzh/chordPrediction/releases/">Releases</a>下载可执行文件</strong>，现已支持Windows）</h4>
 
 <h3>六、如何使用</h3>
 
-<p>**待更新...**</p>
+<iframe src="//player.bilibili.com/player.html?isOutside=true&aid=1105200454&bvid=BV1Ww4m1i7CN&cid=1560428694&p=1" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
+
+<p>参见我在B站上发布的软件使用指南，【我开发了一个和弦创作工具（基于马尔可夫链的和弦预测算法）「开发的 KL」】 https://www.bilibili.com/video/BV1Ww4m1i7CN/?share_source=copy_web&vd_source=1243dee83a20c6e1d4c96e246dd5b026</p>
 
 <h3>七、未来更新清单</h3>
 
@@ -105,13 +110,13 @@
 
 <pre><code class="code-highlighted code-python"><span class="syntax-all syntax-comment">#TODO ❗️❗️ 对踏板的适配、预览和弦（全部播放、当前播放、预选音色和节拍）、播放时对当前序列的和弦的键位渲染、匹配比例阈值、预测和弦的序列化展示、对预测和弦的键位渲染
 </span><span class="syntax-all syntax-comment">#TODO ❗️ 和弦的情绪属性、暂停记录
-</span><span class="syntax-all syntax-comment">#TODO ❗️❗️❗️ 支持多预测结果的输出
+</span><span class="syntax-all syntax-comment">#TODO ❗️❗️❗️ 支持多预测结果的输出 ✔已完成
 </span><span class="syntax-all syntax-comment">#TODO 和弦预测的初始化函数执行动作不再每秒刷新一次了，现在改成只会在标签改变事件发生时才会触发，极大地提升了系统性能
 </span><span class="syntax-all syntax-comment">#TODO ❗️❗️ getChordAttr和弦输出测试
 </span><span class="syntax-all syntax-comment">#TODO 预测来源
 </span><span class="syntax-all syntax-comment">#TODO 更详细的分类
 </span><span class="syntax-all syntax-comment">#TODO 日志系统/和弦翻译系统
-</span><span class="syntax-all syntax-comment">#TODO ❗️❗️❗️ 基于转移概率矩阵的优化算法
+</span><span class="syntax-all syntax-comment">#TODO ❗️❗️❗️ 基于转移概率矩阵的优化算法 ✔已完成
 </span></code></pre>
 
 <h3>作者寄语</h3>

@@ -1,5 +1,7 @@
 import os
+import io
 import sys
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 from PyQt5.QtGui import QFont, QFontMetrics
 from PyQt5.QtWidgets import *
@@ -251,7 +253,7 @@ class VirtualKeyboard(QWidget):
             # 设置文本域为只读
             text_edit.setReadOnly(True)
             cursor = text_edit.textCursor()
-            with open(filePath(directory_labels) + str(file_name), 'r') as f:
+            with open(filePath(directory_labels) + str(file_name), 'r', encoding='utf-8') as f:
                 lineNum = 1
                 for line in f:
                     if lineNum != 1:
@@ -270,7 +272,7 @@ class VirtualKeyboard(QWidget):
             # 设置文本域为只读
             text_edit.setReadOnly(True)
             cursor = text_edit.textCursor()
-            with open(filePath(directory_records) + str(file_name), 'r') as f:
+            with open(filePath(directory_records) + str(file_name), 'r', encoding='utf-8') as f:
                 lineNum = 1
                 for line in f:
                     if lineNum != 1:
@@ -326,12 +328,12 @@ class VirtualKeyboard(QWidget):
             filename = self.edit_1.text() + ".model"
             file_path = os.path.join(directory, filename)
             if os.path.exists(file_path):
-                with open(os.path.join(directory, filename), 'a') as f:
+                with open(os.path.join(directory, filename), 'a', encoding='utf-8') as f:
                     f.write("\n")
                     csv_str = ',,'.join(self.QUEUE.array)
                     f.write(csv_str + "||" + self.edit_3.text())
             else:
-                with open(os.path.join(directory, filename), 'w') as f:
+                with open(os.path.join(directory, filename), 'w', encoding='utf-8') as f:
                     f.write(self.edit_2.text())
                     f.write("\n")
                     csv_str = ',,'.join(self.QUEUE.array)
@@ -352,13 +354,13 @@ class VirtualKeyboard(QWidget):
                 file_path = os.path.join(directory, filename)
                 if filename != "":
                     if os.path.exists(file_path):
-                        with open(os.path.join(directory, filename), 'a') as f:
+                        with open(os.path.join(directory, filename), 'a', encoding='utf-8') as f:
                             f.write("\n")
                             csv_str = ',,'.join(self.QUEUE.array)
                             f.write(csv_str + "||" + self.edit_3.text())
 
                     else:
-                        with open(os.path.join(directory, filename), 'w') as f:
+                        with open(os.path.join(directory, filename), 'w', encoding='utf-8') as f:
                             f.write(self.edit_2.text())
                             f.write("\n")
                             csv_str = ',,'.join(self.QUEUE.array)
@@ -546,7 +548,8 @@ class VirtualKeyboard(QWidget):
         for cbox in self.findChildren(QCheckBox):
             if cbox.isChecked():
                 print(cbox)
-                with open(filePath('labels/') + cbox.text() + '.model', 'r') as f:
+                with open(filePath('labels/') + cbox.text() + '.model', 'r', encoding='utf-8'
+                          ) as f:
                     lineNum = 1
                     for line in f:
                         if lineNum != 1:
