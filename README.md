@@ -79,6 +79,7 @@
 ### 六、如何使用
 
 参见我在B站上发布的软件使用指南，【我开发了一个和弦创作工具（基于马尔科夫链的和弦预测算法）「开发的 KL」】 [链接](https://www.bilibili.com/video/BV1Ww4m1i7CN/?share_source=copy_web&vd_source=1243dee83a20c6e1d4c96e246dd5b026)
+<iframe src="//player.bilibili.com/player.html?isOutside=true&aid=1105200454&bvid=BV1Ww4m1i7CN&cid=1560428694&p=1" width="720" height="450" scrolling="no" border="0" frameborder="no" framespacing="0" allowfullscreen="true"></iframe>
 
 ### 七、未来更新清单
 
