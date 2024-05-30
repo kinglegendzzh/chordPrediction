@@ -53,22 +53,31 @@
 本系统需要一些基础的环境配置来确保能够正常运行。以下是安装的详细步骤：
 
 1. 下载并安装 Python 3.7 或更高版本。
+
 2. 克隆本项目到本地：
    ```bash
    git clone https://github.com/kinglegendzzh/chordPrediction.git
-3. 进入项目目录并安装依赖：
+3. 进入项目目录：
    ```bash
    cd chordPrediction
-   pip install -r requirements.txt
    ```
+4. 安装相关依赖
+<p>安装<strong>musicpy</strong>库：<a href="https://github.com/Rainbow-Dreamer/musicpy">https://github.com/Rainbow-Dreamer/musicpy</a></p>
 
-### 五、如何打包
+<p>安装<strong>pyqt5</strong>库： <a href="https://pypi.org/project/PyQt5/">https://pypi.org/project/PyQt5/</a></p>
+
+<p>安装<strong>pygame</strong>库：<a href="https://www.pygame.org/download.shtml">https://www.pygame.org/download.shtml</a></p>
+
+### 五、如何打包并生成可执行文件
 
 打包本系统有两种方式：
 
 #### 方式一（手动打包）
 
-1. 下载 PyInstaller，并在项目路径下执行以下命令生成可执行文件：
+1. 下载 PyInstaller，并在项目路径下执行以下命令生成可执行文件，
+2. 找到ChordCrafter.spec或ChordCrafter_win64.spec文件，根据注释提示修改相关Path路径；
+3. 在终端进入项目路径，输入下列命令即可生成可执行文件；
+ 
    ```bash
    pyinstaller ChordCrafter.spec  # 适用于MacOS/Linux打包
    pyinstaller ChordCrafter_win64.spec  # 适用于Windows打包
@@ -108,4 +117,3 @@
 我于2020年开始接触乐理，21年后逐渐对编曲创作原理初步形成了自己的理解，虽然我并非音乐班底出身，但抱着对音乐创作的兴趣我一直坚持自学编曲，我在我的哔哩哔哩账号中会经常发表音乐作品和相关技术性文章。自学期间踩过很多的坑，也吸取了很多经验。在2022年8月份左右，我在想能否开发一个辅助我音乐创作的工具，于是诞生起了这个项目的点子，调研期间我发现，python语言对音乐生成领域、机器学习领域有很大的优势，它有着生态丰富的开源社区；同时我发现了有不少音乐/编程双修的同行人也在对这个比较小众的交叉领域无私地奉献着，为我提供了许多宝贵的经验，我在此向这些先行者致敬🫡
 
 本人对音乐创作和计算机领域的研究都有比较大的兴趣，即使这个项目无人问津未来我也将持续更新、自己自用。如果很有幸你能喜欢并使用我的程序，欢迎提出你的宝贵建议，你的支持是我最大的更新动力。个人邮箱：kinglegendzzh@163.com。个人微信：zzh13999325716
-```
