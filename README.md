@@ -62,8 +62,10 @@
    cd chordPrediction
    ```
 4. 安装并导入一些必要的外部依赖
-   > 下载 FluidR3_GM Soundfont https://member.keymusician.com/Member/FluidR3_GM/index.html
-   > 安装fluidsynth的C编译库 https://www.fluidsynth.org/
+   > - 下载 FluidR3_GM Soundfont（https://member.keymusician.com/Member/FluidR3_GM/index.html ），
+   > 解压并将sf2文件放置在<project>/sounds/FluidR3_GM/put_file_to_here同级目录中。
+   > 
+   > - 安装fluidsynth的C编译库（https://www.fluidsynth.org/ ）
 5. 安装相关依赖
    ```bash
    pip install -r requirements.txt
