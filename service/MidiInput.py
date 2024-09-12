@@ -1,6 +1,9 @@
 import pygame
 import pygame.midi
 from PyQt5.QtCore import *
+from PyQt5.QtWidgets import QApplication, QLineEdit
+from pynput.keyboard import Key
+
 from service.soundNoise import SoundNoise
 from pynput import keyboard  # 用于监听键盘输入
 
@@ -9,6 +12,7 @@ class MidiInput(QObject):
     """处理MIDI输入和键盘映射的类"""
     v_key_pressed = pyqtSignal(int)
     v_key_released = pyqtSignal(int)
+    listening_enabled = True
 
     # 键盘到MIDI音符的映射
     key_mapping = {
@@ -73,15 +77,27 @@ class MidiInput(QObject):
 
     def _on_key_press(self, key):
         """处理键盘按下事件"""
+        focused_widget = QApplication.focusWidget()  # 获取当前焦点的控件
+        if isinstance(focused_widget, QLineEdit):
+            return  # 如果焦点在 QLineEdit 上，不触发 MIDI 音符映射
         try:
-            key_char = key.char.upper()
-            if key_char in self.key_mapping:
-                self._handle_note_press(self.key_mapping[key_char])
+            if key.char == '`' or key.char == '~':
+                # 切换监听开关
+                self.listening_enabled = not self.listening_enabled
+                print(f"键盘监听 {'启用' if self.listening_enabled else '禁用'}")
+            elif self.listening_enabled:
+                # 如果监听启用，处理键盘输入
+                key_char = key.char.upper()
+                if key_char in self.key_mapping:
+                    self._handle_note_press(self.key_mapping[key_char])
         except AttributeError:
             pass  # 忽略特殊键（如Shift等）
 
     def _on_key_release(self, key):
         """处理键盘释放事件"""
+        focused_widget = QApplication.focusWidget()
+        if isinstance(focused_widget, QLineEdit):
+            return  # 焦点在文本输入框时不触发音符释放事件
         try:
             key_char = key.char.upper()
             if key_char in self.key_mapping:

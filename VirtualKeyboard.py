@@ -17,6 +17,7 @@ from utils.filePath import filePath
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', line_buffering=True)
 
+
 class VirtualKeyboard(QWidget):
     """
     虚拟钢琴键盘类，包含钢琴键盘上所有按键，并能够根据键盘事件实时更新某些按键的显示状态。
@@ -60,6 +61,8 @@ class VirtualKeyboard(QWidget):
     # 无设备标识
     NoneMIDI = False
 
+    listening_enabled = True
+
     def __init__(self, NoneMIDI=False):
         super().__init__()
         sys.stdout.flush()
@@ -88,8 +91,10 @@ class VirtualKeyboard(QWidget):
         self.setFixedSize(1200, 800)
         self.setWindowTitle('智能化音乐创作工具')
         if self.NoneMIDI:
-            title = QLabel("###您并没有接入MIDI设备###")
+            print('使用<英文键盘>映射模式')
+            title = QLabel("使用<英文键盘>映射模式")
         else:
+            print('成功接入MIDI键盘')
             title = QLabel('虚拟MIDI键盘')
         title.setAlignment(Qt.AlignCenter)
 
@@ -220,9 +225,12 @@ class VirtualKeyboard(QWidget):
         self.shaderLists(self.vbox)
 
         self.vbox.addWidget(title)
-        if self.NoneMIDI is False:
-            self.vbox.addLayout(grid)
-
+        self.vbox.addLayout(grid)
+        # 添加状态展示框
+        self.status_label = QLabel("<~键>控制当前监听状态：已开启", self)
+        self.status_label.setAlignment(Qt.AlignCenter)
+        self.status_label.setStyleSheet("font-size: 12px; color: green;")
+        self.vbox.addWidget(self.status_label)
         self.setLayout(self.vbox)
 
     def shaderLists(self, vbox, listWidget=None, stackedWidget=None):
@@ -398,19 +406,18 @@ class VirtualKeyboard(QWidget):
         # print(ch)
         # get_chord(ch.root, ch.chord_type)
         i = 0
-        if self.NoneMIDI is False:
-            for button in self.keys_button:
-                if self.key_pressed[i] == True:
-                    if self.keys[i] == 'w':
-                        self.changeWhiteSheet(button, True)
-                    else:
-                        self.changeBlackSheet(button, True)
+        for button in self.keys_button:
+            if self.key_pressed[i] == True:
+                if self.keys[i] == 'w':
+                    self.changeWhiteSheet(button, True)
                 else:
-                    if self.keys[i] == 'w':
-                        self.changeWhiteSheet(button)
-                    else:
-                        self.changeBlackSheet(button)
-                i += 1
+                    self.changeBlackSheet(button, True)
+            else:
+                if self.keys[i] == 'w':
+                    self.changeWhiteSheet(button)
+                else:
+                    self.changeBlackSheet(button)
+            i += 1
 
     @pyqtSlot()
     def updateMIDI(self):
@@ -535,6 +542,24 @@ class VirtualKeyboard(QWidget):
         super().closeEvent(event)
         self.close()
 
+    def keyPressEvent(self, event):
+        self.setFocusPolicy(Qt.StrongFocus)
+        if str(event.key()) == '96' or str(event.key()) == '126':
+            if self.NoneMIDI:
+                # 切换监听模式
+                print(f"Key pressed: {event.key()}")
+                self.listening_enabled = not self.listening_enabled
+                if self.listening_enabled:
+                    self.status_label.setText("<~键>控制当前监听状态：已开启")
+                    self.status_label.setStyleSheet("font-size: 12px; color: green;")
+                else:
+                    self.status_label.setText("<~键>控制当前监听状态：已关闭")
+                    self.status_label.setStyleSheet("font-size: 12px; color: red;")
+                print(f"监听模式：{'开启' if self.listening_enabled else '关闭'}")
+        else:
+            # 调用父类的按键处理
+            super().keyPressEvent(event)
+
     @pyqtSlot()
     def updateChords(self):
         chord_sequences = []
@@ -629,23 +654,19 @@ if __name__ == '__main__':
     app = QApplication(sys.argv)
 
     # 创建虚拟钢琴键盘对象和MIDI输入对象，并将MIDI输入对象的虚拟键盘事件与虚拟钢琴键盘对象的虚拟键盘事件相连
-    virtual_keyboard = VirtualKeyboard()
     midi_input = MidiInput()
+    print(f'是否开启键盘映射：{midi_input.use_keyboard_mapping}')
     if midi_input.use_keyboard_mapping:
-        midi_input.v_key_pressed.connect(on_virtual_key_pressed)
-        midi_input.v_key_released.connect(on_virtual_key_released)
-        midi_input_thread = QThread()
-        midi_input.moveToThread(midi_input_thread)
-        midi_input_thread.started.connect(midi_input.run)
-        midi_input_thread.start()
+        virtual_keyboard = VirtualKeyboard(True)
+
     else:
-        print("使用键盘映射模式")
-        midi_input.v_key_pressed.connect(on_virtual_key_pressed)
-        midi_input.v_key_released.connect(on_virtual_key_released)
-        midi_input_thread = QThread()
-        midi_input.moveToThread(midi_input_thread)
-        midi_input_thread.started.connect(midi_input.run)
-        midi_input_thread.start()
+        virtual_keyboard = VirtualKeyboard()
+    midi_input.v_key_pressed.connect(on_virtual_key_pressed)
+    midi_input.v_key_released.connect(on_virtual_key_released)
+    midi_input_thread = QThread()
+    midi_input.moveToThread(midi_input_thread)
+    midi_input_thread.started.connect(midi_input.run)
+    midi_input_thread.start()
     virtual_keyboard.show()
     virtual_keyboard.start_timer()
 
