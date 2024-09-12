@@ -21,21 +21,7 @@ a = Analysis(
     ('/Users/apple/Desktop/pythonProject/chordPrediction/labels','labels'),
     ('/Users/apple/Desktop/pythonProject/chordPrediction/records','records'),
     ('/Users/apple/Desktop/pythonProject/chordPrediction/sounds','sounds'),
-    ('/Users/apple/Desktop/pythonProject/chordPrediction/sounds/FluidR3_GM','FluidR3_GM'),
-    ('/Users/apple/Desktop/pythonProject/chordPrediction/sounds/FluidR3_GM/FluidR3_GM.sf2','FluidR3_GM'),
-    ('/Users/apple/Desktop/pythonProject/chordPrediction/labels/dorian.model','labels'),
-    ('/Users/apple/Desktop/pythonProject/chordPrediction/labels/jazz.model','labels'),
-    ('/Users/apple/Desktop/pythonProject/chordPrediction/labels/pop.model','labels'),
-    ('/Users/apple/Desktop/pythonProject/chordPrediction/labels/rock.model','labels'),
-    ('/Users/apple/Desktop/pythonProject/chordPrediction/labels/五度圈模型.model','labels'),
-    ('/Users/apple/Desktop/pythonProject/chordPrediction/labels/常用终止式.model','labels'),
-    ('/Users/apple/Desktop/pythonProject/chordPrediction/labels/忧郁.model','labels'),
-    ('/Users/apple/Desktop/pythonProject/chordPrediction/labels/恢弘.model','labels'),
-    ('/Users/apple/Desktop/pythonProject/chordPrediction/labels/我的自制数据集.model','labels'),
-    ('/Users/apple/Desktop/pythonProject/chordPrediction/records/多利亚宇.model','records'),
-    ('/Users/apple/Desktop/pythonProject/chordPrediction/records/悲伤爵士.model','records'),
-    ('/Users/apple/Desktop/pythonProject/chordPrediction/records/我的自制和弦.model','records'),
-    ('/Users/apple/Desktop/pythonProject/chordPrediction/records/马里奥终止式.model','records')
+    ('/Users/apple/Desktop/pythonProject/chordPrediction/sounds/FluidR3_GM','sounds/FluidR3_GM')
     ], #输入你想要导入的资源文件（预测模板），（Windows系统需要将上述默认配置改成绝对路径，否则将导入失败）
     hiddenimports=[],
     hookspath=[],

@@ -85,6 +85,7 @@ class VirtualKeyboard(QWidget):
         self.updateTimer = QTimer(self)
         self.updateTimer.timeout.connect(self.updateButtonColor)
         self.updateTimer.timeout.connect(self.updateMIDI)
+        self.clearFocus()
 
     def initUI(self):
         # 设置窗口大小和标题
