@@ -48,7 +48,7 @@
 
 因此该系统主要支撑起了音乐创作流程中的和弦设计阶段，对于音乐制作人来说，通过这个系统可以缩短创作时间。制作人可以将系统生成的和弦进行结合嵌入到自己的作品之中，达到更好的效果和质量。此外，该系统还可作为乐曲创作的辅助工具，在需要作曲时，再加入自己的创意和想象，更好地满足自己的创意和要求。
 
-### 四、安装指南
+### 四、开发编译的安装指南
 
 本系统需要一些基础的环境配置来确保能够正常运行。以下是安装的详细步骤：
 
@@ -61,14 +61,17 @@
    ```bash
    cd chordPrediction
    ```
-4. 安装相关依赖
-```bash
-pip install -r requirements.txt
-```
-> **部分参考**：
-> <p>安装<strong>musicpy</strong>库：<a href="https://github.com/Rainbow-Dreamer/musicpy">https://github.com/Rainbow-Dreamer/musicpy</a></p>
-> <p>安装<strong>pyqt5</strong>库： <a href="https://pypi.org/project/PyQt5/">https://pypi.org/project/PyQt5/</a></p>
-> <p>安装<strong>pygame</strong>库：<a href="https://www.pygame.org/download.shtml">https://www.pygame.org/download.shtml</a></p>
+4. 安装并导入一些必要的外部依赖
+   > 下载 FluidR3_GM Soundfont https://member.keymusician.com/Member/FluidR3_GM/index.html
+   > 安装fluidsynth的C编译库 https://www.fluidsynth.org/
+5. 安装相关依赖
+   ```bash
+   pip install -r requirements.txt
+   ```
+   > **部分参考**：
+   > <p>安装<strong>musicpy</strong>库：<a href="https://github.com/Rainbow-Dreamer/musicpy">https://github.com/Rainbow-Dreamer/musicpy</a></p>
+   > <p>安装<strong>pyqt5</strong>库： <a href="https://pypi.org/project/PyQt5/">https://pypi.org/project/PyQt5/</a></p>
+   > <p>安装<strong>pygame</strong>库：<a href="https://www.pygame.org/download.shtml">https://www.pygame.org/download.shtml</a></p>
 
 
 ### 五、如何打包并生成可执行文件
