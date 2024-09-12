@@ -545,10 +545,10 @@ class VirtualKeyboard(QWidget):
 
     def keyPressEvent(self, event):
         self.setFocusPolicy(Qt.StrongFocus)
-        if str(event.key()) == '96' or str(event.key()) == '126':
+        print(f"Key pressed: {event.key()}")
+        if str(event.key()) == '96' or str(event.key()) == '126' or str(event.key()) == '183':
             if self.NoneMIDI:
                 # 切换监听模式
-                print(f"Key pressed: {event.key()}")
                 self.listening_enabled = not self.listening_enabled
                 if self.listening_enabled:
                     self.status_label.setText("<~键>控制当前监听状态：已开启")

@@ -21,7 +21,7 @@ a = Analysis(
     ('/Users/apple/Desktop/pythonProject/chordPrediction/labels','labels'),
     ('/Users/apple/Desktop/pythonProject/chordPrediction/records','records'),
     ('/Users/apple/Desktop/pythonProject/chordPrediction/sounds','sounds'),
-    ('/Users/apple/Desktop/pythonProject/chordPrediction/sounds/FluidR3_GM','sounds/FluidR3_GM')
+    ('/Users/apple/Desktop/pythonProject/chordPrediction/sounds/FluidR3_GM','sounds/FluidR3_GM/')
     ], #输入你想要导入的资源文件（预测模板），（Windows系统需要将上述默认配置改成绝对路径，否则将导入失败）
     hiddenimports=[],
     hookspath=[],
