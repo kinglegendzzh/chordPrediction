@@ -62,11 +62,14 @@
    cd chordPrediction
    ```
 4. 安装相关依赖
-<p>安装<strong>musicpy</strong>库：<a href="https://github.com/Rainbow-Dreamer/musicpy">https://github.com/Rainbow-Dreamer/musicpy</a></p>
+```bash
+pip install -r requirements.txt
+```
+> **部分参考**：
+> <p>安装<strong>musicpy</strong>库：<a href="https://github.com/Rainbow-Dreamer/musicpy">https://github.com/Rainbow-Dreamer/musicpy</a></p>
+> <p>安装<strong>pyqt5</strong>库： <a href="https://pypi.org/project/PyQt5/">https://pypi.org/project/PyQt5/</a></p>
+> <p>安装<strong>pygame</strong>库：<a href="https://www.pygame.org/download.shtml">https://www.pygame.org/download.shtml</a></p>
 
-<p>安装<strong>pyqt5</strong>库： <a href="https://pypi.org/project/PyQt5/">https://pypi.org/project/PyQt5/</a></p>
-
-<p>安装<strong>pygame</strong>库：<a href="https://www.pygame.org/download.shtml">https://www.pygame.org/download.shtml</a></p>
 
 ### 五、如何打包并生成可执行文件
 
@@ -75,6 +78,9 @@
 #### 方式一（手动打包）
 
 1. 下载 PyInstaller，并在项目路径下执行以下命令生成可执行文件，
+```bash
+pip install pyinstaller
+```
 2. 找到ChordCrafter.spec或ChordCrafter_win64.spec文件，根据注释提示修改相关Path路径；
 3. 在终端进入项目路径，输入下列命令即可生成可执行文件；
  

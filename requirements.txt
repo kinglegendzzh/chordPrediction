@@ -1,0 +1,5 @@
+pyfluidsynth
+musicpy
+pyqt5
+pygame
+pynput
