@@ -8,6 +8,8 @@ a = Analysis(
     ['VirtualKeyboard.py',
     'service/markov.py',
     'service/MidiInput.py',
+    'service/numpyMarkov.py',
+    'service/soundNoise.py',
     'utils/filePath.py',
     'utils/musicUtils.py',
     'utils/QueueUtil.py',
@@ -18,6 +20,9 @@ a = Analysis(
     datas=[
     ('/Users/apple/Desktop/pythonProject/chordPrediction/labels','labels'),
     ('/Users/apple/Desktop/pythonProject/chordPrediction/records','records'),
+    ('/Users/apple/Desktop/pythonProject/chordPrediction/sounds','sounds'),
+    ('/Users/apple/Desktop/pythonProject/chordPrediction/sounds/FluidR3_GM','FluidR3_GM'),
+    ('/Users/apple/Desktop/pythonProject/chordPrediction/sounds/FluidR3_GM/FluidR3_GM.sf2','FluidR3_GM'),
     ('/Users/apple/Desktop/pythonProject/chordPrediction/labels/dorian.model','labels'),
     ('/Users/apple/Desktop/pythonProject/chordPrediction/labels/jazz.model','labels'),
     ('/Users/apple/Desktop/pythonProject/chordPrediction/labels/pop.model','labels'),

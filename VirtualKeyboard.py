@@ -15,16 +15,7 @@ from utils import QueueUtil
 from utils import musicUtils
 from utils.filePath import filePath
 
-
-# TODO 对踏板的适配、预览和弦（全部播放、当前播放、预选音色和节拍）、播放时对当前序列的和弦的键位渲染、匹配比例阈值、预测和弦的序列化展示、对预测和弦的键位渲染
-# TODO 和弦的情绪属性、暂停记录
-# TODO 支持多预测结果的输出
-# TODO 和弦预测的初始化函数执行动作不再每秒刷新一次了，现在改成只会在标签改变事件发生时才会触发，极大地提升了系统性能
-# TODO getChordAttr和弦输出测试
-# TODO 预测来源
-# TODO 更详细的分类
-# TODO 日志系统/和弦翻译系统
-# TODO 无设备也能操作和弦（和弦网格）
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', line_buffering=True)
 
 class VirtualKeyboard(QWidget):
     """
@@ -71,6 +62,7 @@ class VirtualKeyboard(QWidget):
 
     def __init__(self, NoneMIDI=False):
         super().__init__()
+        sys.stdout.flush()
         self.NoneMIDI = NoneMIDI
         # 添加布局
         self.vbox = QVBoxLayout()
@@ -638,8 +630,8 @@ if __name__ == '__main__':
 
     # 创建虚拟钢琴键盘对象和MIDI输入对象，并将MIDI输入对象的虚拟键盘事件与虚拟钢琴键盘对象的虚拟键盘事件相连
     virtual_keyboard = VirtualKeyboard()
-    try:
-        midi_input = MidiInput()
+    midi_input = MidiInput()
+    if midi_input.use_keyboard_mapping:
         if midi_input.choosed:
             midi_input.v_key_pressed.connect(on_virtual_key_pressed)
             midi_input.v_key_released.connect(on_virtual_key_released)
@@ -647,11 +639,17 @@ if __name__ == '__main__':
             midi_input.moveToThread(midi_input_thread)
             midi_input_thread.started.connect(midi_input.run)
             midi_input_thread.start()
-    except ValueError:
-        print("未找到任何midi设备")
-        virtual_keyboard = VirtualKeyboard(True)
+        else:
+            print("未找到任何midi设备")
+    else:
+        print("使用键盘映射模式")
+        midi_input.v_key_pressed.connect(on_virtual_key_pressed)
+        midi_input.v_key_released.connect(on_virtual_key_released)
+        midi_input_thread = QThread()
+        midi_input.moveToThread(midi_input_thread)
+        midi_input_thread.started.connect(midi_input.run)
+        midi_input_thread.start()
     virtual_keyboard.show()
-
     virtual_keyboard.start_timer()
 
     # 启动Qt的事件循环
