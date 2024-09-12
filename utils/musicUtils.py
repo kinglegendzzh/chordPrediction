@@ -14,4 +14,3 @@ class detectElement:
 
     def getChordAttr(self):
         return musicpy.algorithms.detect(self.pressing, get_chord_type=True)
-

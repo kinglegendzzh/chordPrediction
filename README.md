@@ -57,6 +57,7 @@
 2. 克隆本项目到本地：
    ```bash
    git clone https://github.com/kinglegendzzh/chordPrediction.git
+   ```
 3. 进入项目目录：
    ```bash
    cd chordPrediction

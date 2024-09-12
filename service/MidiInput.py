@@ -127,10 +127,3 @@ class MidiInput(QObject):
             self.midi_input.close()
             pygame.midi.quit()
         pygame.quit()
-
-
-# 使用示例
-if __name__ == '__main__':
-    app = QApplication([])
-    midi_input = MidiInput()
-    midi_input.run()
