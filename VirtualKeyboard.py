@@ -632,15 +632,12 @@ if __name__ == '__main__':
     virtual_keyboard = VirtualKeyboard()
     midi_input = MidiInput()
     if midi_input.use_keyboard_mapping:
-        if midi_input.choosed:
-            midi_input.v_key_pressed.connect(on_virtual_key_pressed)
-            midi_input.v_key_released.connect(on_virtual_key_released)
-            midi_input_thread = QThread()
-            midi_input.moveToThread(midi_input_thread)
-            midi_input_thread.started.connect(midi_input.run)
-            midi_input_thread.start()
-        else:
-            print("未找到任何midi设备")
+        midi_input.v_key_pressed.connect(on_virtual_key_pressed)
+        midi_input.v_key_released.connect(on_virtual_key_released)
+        midi_input_thread = QThread()
+        midi_input.moveToThread(midi_input_thread)
+        midi_input_thread.started.connect(midi_input.run)
+        midi_input_thread.start()
     else:
         print("使用键盘映射模式")
         midi_input.v_key_pressed.connect(on_virtual_key_pressed)
