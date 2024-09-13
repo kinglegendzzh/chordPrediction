@@ -1,14 +1,15 @@
 import platform
 import fluidsynth
 from utils.filePath import filePath
-
+import logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 class SoundNoise:
     fs = None
 
     def __init__(self):
         super().__init__()
-        print('初始化 Fluidsynth 并加载 SoundFont')
+        logging.info('初始化 Fluidsynth 并加载 SoundFont')
 
         # 检测操作系统并选择合适的音频驱动
         system = platform.system()
@@ -21,7 +22,7 @@ class SoundNoise:
         else:
             driver = "pulseaudio"  # 默认选择 pulseaudio
 
-        print(f"Detected OS: {system}, 使用音频驱动: {driver}")
+        logging.info(f"Detected OS: {system}, 使用音频驱动: {driver}")
 
         # 初始化 Fluidsynth，并启动合适的音频驱动
         self.fs = fluidsynth.Synth()

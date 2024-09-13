@@ -2,7 +2,7 @@ import os
 import io
 import sys
 
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+from MatrixView import MatrixView
 
 from PyQt5.QtGui import QFont, QFontMetrics
 from PyQt5.QtWidgets import *
@@ -14,8 +14,10 @@ from service.numpyMarkov import ChordPredictor
 from utils import QueueUtil
 from utils import musicUtils
 from utils.filePath import filePath
+import logging
 
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', line_buffering=True)
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 class VirtualKeyboard(QWidget):
@@ -67,6 +69,8 @@ class VirtualKeyboard(QWidget):
     predictor = None
     last_order = None
 
+    image_window = None
+
     def __init__(self, NoneMIDI=False):
         super().__init__()
         sys.stdout.flush()
@@ -96,10 +100,10 @@ class VirtualKeyboard(QWidget):
         self.setFixedSize(1200, 800)
         self.setWindowTitle('智能化音乐创作工具')
         if self.NoneMIDI:
-            print('使用<英文键盘>映射模式')
+            logging.info('使用<英文键盘>映射模式')
             title = QLabel("使用<英文键盘>映射模式")
         else:
-            print('成功接入MIDI键盘')
+            logging.info('成功接入MIDI键盘')
             title = QLabel('虚拟MIDI键盘')
         title.setAlignment(Qt.AlignCenter)
 
@@ -132,6 +136,10 @@ class VirtualKeyboard(QWidget):
         ch.setAlignment(Qt.AlignCenter)
         ch.setObjectName("next")
         self.vbox.addWidget(ch)
+
+        self.buttonV = QPushButton("打开概率转移矩阵分析图", self)
+        self.buttonV.clicked.connect(self.open_image_window)
+        self.vbox.addWidget(self.buttonV)
 
         # 初始化和弦序列
         chTitle = QLabel("实时记录最新十条和弦(松开琴键以写入,点击和弦以移出序列)：")
@@ -237,6 +245,11 @@ class VirtualKeyboard(QWidget):
         self.status_label.setStyleSheet("font-size: 12px; color: green;")
         self.vbox.addWidget(self.status_label)
         self.setLayout(self.vbox)
+
+    def open_image_window(self):
+        if not self.image_window:
+            self.image_window = MatrixView()
+        self.image_window.show()
 
     def shaderLists(self, vbox, listWidget=None, stackedWidget=None):
         type = 0
@@ -348,7 +361,7 @@ class VirtualKeyboard(QWidget):
             # 刷新list
             self.reShaderLists()
         else:
-            print("填写为空")
+            logging.info("填写为空")
 
     def onLabel(self):
         if self.edit_2.text() != "":
@@ -356,7 +369,7 @@ class VirtualKeyboard(QWidget):
             filenames = self.edit_2.text().split(',')
             for filename in filenames:
                 filename += ".model"
-                print(filename)
+                logging.info(filename)
                 file_path = os.path.join(directory, filename)
                 if filename != "":
                     if os.path.exists(file_path):
@@ -376,7 +389,7 @@ class VirtualKeyboard(QWidget):
             # 刷新label
             self.reShaderLabels()
         else:
-            print("填写为空")
+            logging.info("填写为空")
 
     def onClear(self):
         self.QUEUE.clear()
@@ -384,7 +397,7 @@ class VirtualKeyboard(QWidget):
             self.findChild(QPushButton, "ch" + str(i)).setText("")
 
     def onPressed(self, i):
-        print('Key ' + str(i) + ' was pressed.')
+        logging.info('Key ' + str(i) + ' was pressed.')
         if self.QUEUE.length() > i:
             self.QUEUE.remove(i)
 
@@ -408,7 +421,7 @@ class VirtualKeyboard(QWidget):
         # if self.QUEUE.length()!=0:
         # detectElement = musicUtils.detectElement(pressing)
         # ch = detectElement.getChordAttr()
-        # print(ch)
+        # logging.info(ch)
         # get_chord(ch.root, ch.chord_type)
         i = 0
         for button in self.keys_button:
@@ -457,28 +470,28 @@ class VirtualKeyboard(QWidget):
                 pressing.append(self.values[i])
             i += 1
         if 2 <= len(pressing) <= 5:
-            # print(f"正在按下的所有琴键：{pressing}")
+            # logging.info(f"正在按下的所有琴键：{pressing}")
             detectElement = musicUtils.detectElement(pressing)
             str = detectElement.getNormalChord()
             item = QLabel('当前和弦： ' + str)
             self.chords.setText(item.text())
             if len(pressing) > self.PRE_COUNT:
                 self.PRE_CHORD = str
-            print(self.QUEUE.array)
+            logging.info(self.QUEUE.array)
         elif len(pressing) == 0:
             item = QLabel('当前和弦： ')
             self.chords.setText(item.text())
             if self.PRE_CHORD is not None:
                 if self.PRE_CHORD != self.QUEUE.last():
                     if self.QUEUE.length() < self.MAX_QUEUE:
-                        print("push")
+                        logging.info("push")
                         self.QUEUE.push(self.PRE_CHORD)
                     else:
-                        print("pop")
+                        logging.info("pop")
                         self.QUEUE.pop()
                         self.QUEUE.push(self.PRE_CHORD)
                 else:
-                    print(f"重复和弦{self.QUEUE.last()}")
+                    logging.info(f"重复和弦{self.QUEUE.last()}")
         self.PRE_COUNT = len(pressing)
 
     def changeWhiteSheet(self, button, isGray=False):
@@ -509,7 +522,7 @@ class VirtualKeyboard(QWidget):
         # 计算当前字体下文本的宽度
         text_width = metrics.width(button.text())
 
-        print(f"按钮宽度{max_width}和文本宽度{text_width}")
+        logging.info(f"按钮宽度{max_width}和文本宽度{text_width}")
 
         # 如果文本太长，则根据按钮宽度自动调整字体大小，使文本填充按钮
         if text_width > max_width:
@@ -549,7 +562,7 @@ class VirtualKeyboard(QWidget):
 
     def keyPressEvent(self, event):
         self.setFocusPolicy(Qt.StrongFocus)
-        print(f"Key pressed: {event.key()}")
+        logging.info(f"Key pressed: {event.key()}")
         if str(event.key()) == '96' or str(event.key()) == '126' or str(event.key()) == '183':
             if self.NoneMIDI:
                 # 切换监听模式
@@ -560,7 +573,7 @@ class VirtualKeyboard(QWidget):
                 else:
                     self.status_label.setText("<~键>控制当前监听状态：已关闭")
                     self.status_label.setStyleSheet("font-size: 12px; color: red;")
-                print(f"监听模式：{'开启' if self.listening_enabled else '关闭'}")
+                logging.info(f"监听模式：{'开启' if self.listening_enabled else '关闭'}")
         else:
             # 调用父类的按键处理
             super().keyPressEvent(event)
@@ -570,7 +583,7 @@ class VirtualKeyboard(QWidget):
         chord_sequences = []
         for cbox in self.findChildren(QCheckBox):
             if cbox.isChecked():
-                print(cbox)
+                logging.info(cbox)
                 with open(filePath('labels/') + cbox.text() + '.model', 'r', encoding='utf-8'
                           ) as f:
                     lineNum = 1
@@ -582,17 +595,17 @@ class VirtualKeyboard(QWidget):
                             chord_sequences.append([self.ENDING])
                         lineNum += 1
         if len(chord_sequences) != 0:
-            print(f"构建马尔科夫链{chord_sequences}")
+            logging.info(f"构建马尔科夫链{chord_sequences}")
 
         order = 1 if self.radio_btn1.isChecked() else 2 if self.radio_btn2.isChecked() else 3
 
         if self.QUEUE.length() >= order and len(chord_sequences) > 0:
-            print("阶数:", order)
+            logging.info(f"阶数: {order}")
             if chord_sequences != self.current_chord_sequences or self.last_order is None or self.last_order != order:
                 self.current_chord_sequences = chord_sequences
                 self.predictor = ChordPredictor(chord_sequences, order)
                 self.last_order = order
-                print(f"初始化预测器，阶数：{order}")
+                logging.info(f"初始化预测器，阶数：{order}")
             if order == 3:
                 current_chords = [self.QUEUE.index(self.QUEUE.length() - 3), self.QUEUE.index(self.QUEUE.length() - 2),
                                   self.QUEUE.index(self.QUEUE.length() - 1)]
@@ -603,7 +616,7 @@ class VirtualKeyboard(QWidget):
             check_sequence = []
             for sequence in chord_sequences:
                 check_sequence += sequence
-            print('预测结果: ', predictions)
+            logging.info(f'预测结果: {predictions}')
             self.next.setText(
                 "预测下一个和弦：(<和弦名称>,<匹配比率%>) " + str(predictions))
         else:
@@ -628,10 +641,9 @@ def on_virtual_key_released(index):
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-
     # 创建虚拟钢琴键盘对象和MIDI输入对象，并将MIDI输入对象的虚拟键盘事件与虚拟钢琴键盘对象的虚拟键盘事件相连
     midi_input = MidiInput()
-    print(f'是否开启键盘映射：{midi_input.use_keyboard_mapping}')
+    logging.info(f'是否开启键盘映射：{midi_input.use_keyboard_mapping}')
     if midi_input.use_keyboard_mapping:
         virtual_keyboard = VirtualKeyboard(True)
 
@@ -645,6 +657,5 @@ if __name__ == '__main__':
     midi_input_thread.start()
     virtual_keyboard.show()
     virtual_keyboard.start_timer()
-
     # 启动Qt的事件循环
     sys.exit(app.exec_())
