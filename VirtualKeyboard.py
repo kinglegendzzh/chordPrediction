@@ -97,7 +97,7 @@ class VirtualKeyboard(QWidget):
 
     def initUI(self):
         # 设置窗口大小和标题
-        self.setFixedSize(1200, 800)
+        self.setFixedSize(1200, 850)
         self.setWindowTitle('智能化音乐创作工具')
         if self.NoneMIDI:
             logging.info('使用<英文键盘>映射模式')
@@ -596,6 +596,11 @@ class VirtualKeyboard(QWidget):
                         lineNum += 1
         if len(chord_sequences) != 0:
             logging.info(f"构建马尔科夫链{chord_sequences}")
+            if self.image_window:
+                self.image_window.set_chord_sequences(chord_sequences)
+        else:
+            if self.image_window:
+                self.image_window.set_chord_sequences([])
 
         order = 1 if self.radio_btn1.isChecked() else 2 if self.radio_btn2.isChecked() else 3
 
