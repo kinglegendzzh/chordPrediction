@@ -10,7 +10,7 @@ from PyQt5.QtCore import *
 from musicpy.musicpy import N
 
 from service.MidiInput import MidiInput
-from service.markov import ChordPredictor
+from service.numpyMarkov import ChordPredictor
 from utils import QueueUtil
 from utils import musicUtils
 from utils.filePath import filePath
@@ -62,6 +62,10 @@ class VirtualKeyboard(QWidget):
     NoneMIDI = False
 
     listening_enabled = True
+
+    current_chord_sequences = []
+    predictor = None
+    last_order = None
 
     def __init__(self, NoneMIDI=False):
         super().__init__()
@@ -580,57 +584,28 @@ class VirtualKeyboard(QWidget):
         if len(chord_sequences) != 0:
             print(f"构建马尔科夫链{chord_sequences}")
 
-        order = 2
-        if self.radio_btn1.isChecked():
-            order = 1
-        elif self.radio_btn2.isChecked():
-            order = 2
-        elif self.radio_btn3.isChecked():
-            order = 3
+        order = 1 if self.radio_btn1.isChecked() else 2 if self.radio_btn2.isChecked() else 3
 
         if self.QUEUE.length() >= order and len(chord_sequences) > 0:
             print("阶数:", order)
-            predictor = ChordPredictor("base", chord_sequences, order)
+            if chord_sequences != self.current_chord_sequences or self.last_order is None or self.last_order != order:
+                self.current_chord_sequences = chord_sequences
+                self.predictor = ChordPredictor(chord_sequences, order)
+                self.last_order = order
+                print(f"初始化预测器，阶数：{order}")
             if order == 3:
                 current_chords = [self.QUEUE.index(self.QUEUE.length() - 3), self.QUEUE.index(self.QUEUE.length() - 2),
                                   self.QUEUE.index(self.QUEUE.length() - 1)]
             else:
                 current_chords = [self.QUEUE.index(self.QUEUE.length() - 2), self.QUEUE.index(self.QUEUE.length() - 1)]
-            next_chord, next_chord_prob = predictor.predict_chord(current_chords)
+            predictions = self.predictor.predict_chord(current_chords)
 
             check_sequence = []
             for sequence in chord_sequences:
                 check_sequence += sequence
-            # 准确率检查
-            con = False
-            if order == 1:
-                if self.QUEUE.index(self.QUEUE.length() - 1) in check_sequence:
-                    con = True
-            elif order == 2:
-                for i in range(len(check_sequence) - 1):
-                    if check_sequence[i] == self.QUEUE.index(self.QUEUE.length() - 2) and check_sequence[
-                        i + 1] == self.QUEUE.index(self.QUEUE.length() - 1):
-                        con = True
-                        break
-            elif order == 3:
-                for i in range(len(check_sequence) - 1):
-                    if check_sequence[i] == self.QUEUE.index(self.QUEUE.length() - 3) and check_sequence[
-                        i + 1] == self.QUEUE.index(self.QUEUE.length() - 2) and check_sequence[
-                        i + 2] == self.QUEUE.index(self.QUEUE.length() - 1):
-                        con = True
-                        break
-            if con is False:
-                print("准确率不通过")
-                next_chord_prob = 0
-            print('预测和弦:', next_chord)
-            print('匹配比例:', next_chord_prob)
-            if next_chord in self.ENDING:
-                self.next.setText("可作为终止和弦, 匹配比例：" + str(round(next_chord_prob, 4) * 100) + "%")
-            elif next_chord_prob != 0:
-                self.next.setText(
-                    "预测下一个和弦：" + next_chord + ", 匹配比例：" + str(round(next_chord_prob, 4) * 100) + "%")
-            else:
-                self.next.setText("预测下一个和弦: ")
+            print('预测结果: ', predictions)
+            self.next.setText(
+                "预测下一个和弦：(<和弦名称>,<匹配比率%>) " + str(predictions))
         else:
             self.next.setText("预测下一个和弦: ")
 
