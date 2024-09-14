@@ -6,6 +6,7 @@ from pynput.keyboard import Key
 
 from service.soundNoise import SoundNoise
 from pynput import keyboard  # 用于监听键盘输入
+import logging
 
 
 class MidiInput(QObject):
@@ -58,7 +59,7 @@ class MidiInput(QObject):
 
     def _enable_keyboard_mapping(self):
         """启用键盘映射模式"""
-        print("使用键盘映射模式")
+        logging.info("使用键盘映射模式")
         self.use_keyboard_mapping = True
         self._start_keyboard_listener()
 
@@ -84,7 +85,7 @@ class MidiInput(QObject):
             if key.char == '`' or key.char == '~':
                 # 切换监听开关
                 self.listening_enabled = not self.listening_enabled
-                print(f"键盘监听 {'启用' if self.listening_enabled else '禁用'}")
+                logging.info(f"键盘监听 {'启用' if self.listening_enabled else '禁用'}")
             elif self.listening_enabled:
                 # 如果监听启用，处理键盘输入
                 key_char = key.char.upper()
@@ -121,14 +122,14 @@ class MidiInput(QObject):
         """触发按键按下事件"""
         virtual_key = note - 36
         self.v_key_pressed.emit(virtual_key)
-        print(f"MIDI音符 {note} 按下")
+        logging.info(f"MIDI音符 {note} 按下")
         self.sn.on_midi_input(note, 127)
 
     def _emit_key_release(self, note):
         """触发按键释放事件"""
         virtual_key = note - 36
         self.v_key_released.emit(virtual_key)
-        print(f"MIDI音符 {note} 释放")
+        logging.info(f"MIDI音符 {note} 释放")
         self.sn.on_midi_input(note, 0, False)
 
     def run(self):
@@ -142,7 +143,7 @@ class MidiInput(QObject):
         """处理MIDI事件"""
         for event in events:
             status, note, velocity = event[0][0], event[0][1], event[0][2]
-            print(f"status:{status}, note:{note}, velocity:{velocity}")
+            logging.info(f"status:{status}, note:{note}, velocity:{velocity}")
 
             if 144 <= status <= 159 and velocity > 0:
                 self._handle_note_press(note)
