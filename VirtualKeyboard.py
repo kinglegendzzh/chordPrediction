@@ -469,7 +469,7 @@ class VirtualKeyboard(QWidget):
             if isPressed:
                 pressing.append(self.values[i])
             i += 1
-        if 2 <= len(pressing) <= 5:
+        if 3 <= len(pressing) <= 5:
             # logging.info(f"正在按下的所有琴键：{pressing}")
             detectElement = musicUtils.detectElement(pressing)
             str = detectElement.getNormalChord()
