@@ -13,6 +13,7 @@ from service.MidiInput import MidiInput
 from service.numpyMarkov import ChordPredictor
 from utils import QueueUtil
 from utils import musicUtils
+from utils.FileWorker import FileWriteWorker
 from utils.filePath import filePath
 import logging
 
@@ -461,35 +462,44 @@ class VirtualKeyboard(QWidget):
                 # self.reShaderButton(label)
                 label.setText("")
 
+    @pyqtSlot()
     def pressingEvent(self):
         # 获取正在按下的所有琴键
         i = 0
+        pressingCache = []
         pressing = []
         for isPressed in self.key_pressed:
             if isPressed:
+                pressingCache.append({'index': i, 'name': self.values[i]})
                 pressing.append(self.values[i])
             i += 1
         if 3 <= len(pressing) <= 5:
-            # logging.info(f"正在按下的所有琴键：{pressing}")
+            logging.info(f"正在按下的所有琴键：{pressing}")
             detectElement = musicUtils.detectElement(pressing)
-            str = detectElement.getNormalChord()
-            item = QLabel('当前和弦： ' + str)
+            chord_name = detectElement.getNormalChord()
+            item = QLabel('当前和弦： ' + chord_name)
             self.chords.setText(item.text())
             if len(pressing) > self.PRE_COUNT:
-                self.PRE_CHORD = str
+                self.PRE_CHORD = (chord_name, pressingCache)
             logging.info(self.QUEUE.array)
         elif len(pressing) == 0:
             item = QLabel('当前和弦： ')
             self.chords.setText(item.text())
             if self.PRE_CHORD is not None:
-                if self.PRE_CHORD != self.QUEUE.last():
+                chord_name, pressing_notes = self.PRE_CHORD
+                if chord_name != self.QUEUE.last():
                     if self.QUEUE.length() < self.MAX_QUEUE:
                         logging.info("push")
-                        self.QUEUE.push(self.PRE_CHORD)
+                        self.QUEUE.push(chord_name)
                     else:
                         logging.info("pop")
                         self.QUEUE.pop()
-                        self.QUEUE.push(self.PRE_CHORD)
+                        self.QUEUE.push(chord_name)
+                    # 将 pressing（当前按下的音符）与 self.PRE_CHORD（当前和弦）的映射关系缓存到本地
+                    # 启动异步线程进行文件写入
+                    worker = FileWriteWorker(chord_name, pressing_notes)
+                    QThreadPool.globalInstance().start(worker)
+
                 else:
                     logging.info(f"重复和弦{self.QUEUE.last()}")
         self.PRE_COUNT = len(pressing)
