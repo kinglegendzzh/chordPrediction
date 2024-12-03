@@ -1,6 +1,10 @@
+numpy
 pyfluidsynth
 musicpy
 pyqt5
 pygame
 pynput
 matplotlib
+annoy
+faiss-cpu
+#faiss-gpu
