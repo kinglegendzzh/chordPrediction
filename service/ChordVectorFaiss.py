@@ -39,13 +39,31 @@ class ChordVectorIndex:
                 vector[note] = 1.0
         return vector
 
-    def add_chord(self, chord_name, pressing_str):
+    def add_chord(self, chord_name, pressing_str, force_insert=True):
         """
         添加和弦到索引中
+
+        参数：
+        - chord_name (str): 和弦名称
+        - pressing_str (str): 按键字符串，格式如 'C2@12,16,19'
+        - force_insert (bool): 是否强制插入，当为 False 时，若存在相同记录则不插入
         """
+        # 如果 force_insert 为 False，则在插入前检查是否已经存在相同的 chord_name 和 pressing_str
+        if not force_insert:
+            # 遍历 id_mapping，检查是否存在相同的 chord_name 和 pressing_str
+            for idx, info in self.id_mapping.items():
+                if info['chord_name'] == chord_name and info['pressing_str'] == pressing_str:
+                    # 已经存在相同的记录，不插入
+                    print(f"Chord '{chord_name}' with pressing '{pressing_str}' already exists. Skipping insertion.")
+                    return
+
         # 解析 pressing_str，提取 MIDI 音符序列
         # 格式示例：C2@12,16,19
-        root_note, notes_str = pressing_str.split('@')
+        if '@' in pressing_str:
+            root_note, notes_str = pressing_str.split('@')
+        else:
+            # 处理没有根音的情况
+            notes_str = pressing_str
         midi_notes = list(map(int, notes_str.split(',')))
 
         # 将 MIDI 音符序列转换为向量
@@ -153,7 +171,7 @@ if __name__ == '__main__':
 
     # 导入数据
     cache_file = filePath('models/') + 'pressing_chord_mappings.cache'
-    import_data(index, cache_file)
+    # import_data(index, cache_file)
 
     # 搜索示例
     search_midi_notes = [12, 16, 19]  # Cmajor 的音符序列
@@ -161,9 +179,12 @@ if __name__ == '__main__':
     for res in results:
         print(f"Chord Name: {res['chord_name']}, Distance: {res['distance']}")
 
-    # 添加新的和弦
-    index.add_chord('Am', 'A2@21,24,28')
+    # 添加新的和弦，设置 force_insert=False，避免重复插入
+    index.add_chord('Am', 'A2@21,24,28', force_insert=False)
     index.save_index()
+
+    # 再次尝试插入相同的和弦
+    index.add_chord('Am', 'A2@21,24,28', force_insert=False)  # 这次不会插入
 
     # 更新和弦
     index.update_chord('Am', 'A2@21,24,27')
