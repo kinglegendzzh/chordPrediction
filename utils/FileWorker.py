@@ -11,6 +11,7 @@ from musicpy.musicpy import N
 
 from utils.filePath import filePath
 
+
 class FileWriteWorker(QRunnable):
     """
     文件写入工作线程，用于异步写入缓存文件，避免阻塞主线程。
